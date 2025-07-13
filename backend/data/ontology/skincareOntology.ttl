@@ -60,7 +60,7 @@
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/hasFunction
 :hasFunction rdf:type owl:ObjectProperty ;
              rdfs:domain :Ingredient ;
-             rdfs:range :WhatItDoes .
+             rdfs:range :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/hasKeyIngredient
@@ -99,6 +99,12 @@
 :mayAggravateConcern rdf:type owl:ObjectProperty ;
                      rdfs:domain :Ingredient ;
                      rdfs:range :SkinConcern .
+
+
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/potentiatesEffectOf
+:potentiatesEffectOf rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Ingredient ;
+                     rdfs:range :Ingredient .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/providesBenefit
@@ -157,6 +163,12 @@
             rdfs:range :AllergenType .
 
 
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/userAvoidsIngredient
+:userAvoidsIngredient rdf:type owl:ObjectProperty ;
+                      rdfs:domain :User ;
+                      rdfs:range :Ingredient .
+
+
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/userHasConcern
 :userHasConcern rdf:type owl:ObjectProperty ;
                 rdfs:domain :User ;
@@ -179,58 +191,16 @@
 #    Data properties
 #################################################################
 
-###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#ActualFunctions
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/ActualFunctions
 :ActualFunctions rdf:type owl:DatatypeProperty ;
                  rdfs:domain :Ingredient ;
                  rdfs:range xsd:string .
 
 
-###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#AlternativeNames
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/AlternativeNames
 :AlternativeNames rdf:type owl:DatatypeProperty ;
                   rdfs:domain :Ingredient ;
                   rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#IngredientName
-:IngredientName rdf:type owl:DatatypeProperty ;
-                rdfs:domain :Ingredient ;
-                rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#InteractionWarnings
-:InteractionWarnings rdf:type owl:DatatypeProperty ;
-                     rdfs:domain :Ingredient ;
-                     rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#IsMultifunctional
-:IsMultifunctional rdf:type owl:DatatypeProperty ;
-                   rdfs:domain :Ingredient ;
-                   rdfs:range xsd:boolean .
-
-
-###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#LocalImagePath
-:LocalImagePath rdf:type owl:DatatypeProperty ;
-                rdfs:domain :Product ;
-                rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#MainCategory
-:MainCategory rdf:type owl:DatatypeProperty ;
-              rdfs:domain :Product ;
-              rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#SkinTypeNotes
-:SkinTypeNotes rdf:type owl:DatatypeProperty ;
-               rdfs:domain :Ingredient ;
-               rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#Subcategory
-:Subcategory rdf:type owl:DatatypeProperty ;
-             rdfs:domain :Product ;
-             rdfs:range xsd:string .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/BPOMNumber
@@ -257,6 +227,36 @@
                 rdfs:range xsd:string .
 
 
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/IngredientName
+:IngredientName rdf:type owl:DatatypeProperty ;
+                rdfs:domain :Ingredient ;
+                rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/InteractionWarnings
+:InteractionWarnings rdf:type owl:DatatypeProperty ;
+                     rdfs:domain :Ingredient ;
+                     rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/IsMultifunctional
+:IsMultifunctional rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :Ingredient ;
+                   rdfs:range xsd:boolean .
+
+
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/LocalImagePath
+:LocalImagePath rdf:type owl:DatatypeProperty ;
+                rdfs:domain :Product ;
+                rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/MainCategory
+:MainCategory rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Product ;
+              rdfs:range xsd:string .
+
+
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/ProductDescription
 :ProductDescription rdf:type owl:DatatypeProperty ;
                     rdfs:domain :Product ;
@@ -265,6 +265,18 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/ProductName
 :ProductName rdf:type owl:DatatypeProperty ;
+             rdfs:domain :Product ;
+             rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/SkinTypeNotes
+:SkinTypeNotes rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Ingredient ;
+               rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Subcategory
+:Subcategory rdf:type owl:DatatypeProperty ;
              rdfs:domain :Product ;
              rdfs:range xsd:string .
 
@@ -290,6 +302,26 @@
 #################################################################
 #    Classes
 #################################################################
+
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#DrySkinAvoidanceRule
+:DrySkinAvoidanceRule rdf:type owl:Class ;
+                      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                        owl:onProperty :userHasSkinType ;
+                                        owl:hasValue :Dry
+                                      ] .
+
+
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#OilyAcneRule
+:OilyAcneRule rdf:type owl:Class ;
+              rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                owl:onProperty :userHasConcern ;
+                                owl:hasValue :Acne
+                              ] ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :userHasSkinType ;
+                                owl:hasValue :Oily
+                              ] .
+
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/AcneTreatment
 :AcneTreatment rdf:type owl:Class ;
@@ -432,6 +464,11 @@
                   rdfs:label "Formulation Trait" .
 
 
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Function
+:Function rdf:type owl:Class ;
+          rdfs:label "Function" .
+
+
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Gel
 :Gel rdf:type owl:Class ;
      rdfs:subClassOf :Moisturizer ;
@@ -572,11 +609,6 @@
       rdfs:label "User" .
 
 
-###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/WhatItDoes
-:WhatItDoes rdf:type owl:Class ;
-            rdfs:label "What It Does" .
-
-
 #################################################################
 #    Individuals
 #################################################################
@@ -597,7 +629,7 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Abrasive
 :Abrasive rdf:type owl:NamedIndividual ,
-                   :WhatItDoes .
+                   :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Acne
@@ -623,17 +655,17 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Anti-Acne
 :Anti-Acne rdf:type owl:NamedIndividual ,
-                    :WhatItDoes .
+                    :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Antimicrobial
 :Antimicrobial rdf:type owl:NamedIndividual ,
-                        :WhatItDoes .
+                        :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Antioxidant
 :Antioxidant rdf:type owl:NamedIndividual ,
-                      :WhatItDoes .
+                      :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Antioxidants
@@ -645,11 +677,17 @@
 :BHA rdf:type owl:NamedIndividual ,
               :KeyIngredient ;
      :hasFunction :Exfoliant ;
+     :incompatibleWith :AHA ,
+                       :Retinoid ,
+                       :VitaminC ;
      :providesIngredientBenefit :AcneFighter ,
-                                :GoodForTexture ;
+                                :GoodForTexture ,
+                                :ReducesLargePores ;
      :recommendedFor :Combination ,
                      :Oily ;
-     :treatsConcern :Acne ;
+     :treatsConcern :Acne ,
+                    :Pores ,
+                    :Texture ;
      rdfs:label "Beta Hydroxy Acid" .
 
 
@@ -660,30 +698,32 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Buffering
 :Buffering rdf:type owl:NamedIndividual ,
-                    :WhatItDoes .
+                    :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Cell-CommunicatingIngredient
 :Cell-CommunicatingIngredient rdf:type owl:NamedIndividual ,
-                                       :WhatItDoes .
+                                       :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Ceramides
 :Ceramides rdf:type owl:NamedIndividual ,
                     :KeyIngredient ;
-           :hasFunction :Emollient ;
+           :hasFunction :Emollient ,
+                        :Occlusive ;
            :providesIngredientBenefit :Hydrating ,
                                       :ReducesIrritation ;
            :recommendedFor :Dry ,
                            :Normal ;
-           :synergisticWith :HyaluronicAcid ;
+           :synergisticWith :HyaluronicAcid ,
+                            :Niacinamide ;
            :treatsConcern :Sensitivity ;
            rdfs:label "Ceramides" .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Chelating
 :Chelating rdf:type owl:NamedIndividual ,
-                    :WhatItDoes .
+                    :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/ChemicalUVFilter
@@ -729,12 +769,12 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Emollient
 :Emollient rdf:type owl:NamedIndividual ,
-                    :WhatItDoes .
+                    :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Exfoliant
 :Exfoliant rdf:type owl:NamedIndividual ,
-                    :WhatItDoes .
+                    :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Exfoliators
@@ -744,7 +784,7 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/FilmForming
 :FilmForming rdf:type owl:NamedIndividual ,
-                      :WhatItDoes .
+                      :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/FineLines
@@ -790,7 +830,7 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Humectant
 :Humectant rdf:type owl:NamedIndividual ,
-                    :WhatItDoes .
+                    :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/HyaluronicAcid
@@ -798,12 +838,15 @@
                          :KeyIngredient ;
                 :hasFunction :Humectant ;
                 :providesIngredientBenefit :Hydrating ,
+                                           :Moisturizing ,
                                            :SkinConditioning ;
                 :recommendedFor :Combination ,
                                 :Dry ,
                                 :Normal ,
                                 :Oily ;
-                :treatsConcern :Dryness ;
+                :treatsConcern :Dryness ,
+                               :Redness ,
+                               :Sensitivity ;
                 rdfs:label "Hyaluronic Acid" .
 
 
@@ -812,9 +855,13 @@
                     :Benefit .
 
 
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/LargePores
+:LargePores rdf:type owl:NamedIndividual .
+
+
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Masking
 :Masking rdf:type owl:NamedIndividual ,
-                  :WhatItDoes .
+                  :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/MineralUVFilter
@@ -826,7 +873,7 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Moisturizing
 :Moisturizing rdf:type owl:NamedIndividual ,
-                       :WhatItDoes .
+                       :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Niacinamide
@@ -834,11 +881,18 @@
                       :KeyIngredient ;
              :hasFunction :SkinConditioning ;
              :providesIngredientBenefit :Brightening ,
+                                        :OilControl ,
                                         :ReduceRedness ,
                                         :ReducesLargePores ;
-             :recommendedFor :Combination ;
-             :synergisticWith :HyaluronicAcid ;
-             :treatsConcern :Oiliness ;
+             :recommendedFor :Combination ,
+                             :Dry ,
+                             :Normal ,
+                             :Oily ;
+             :synergisticWith :Ceramides ,
+                              :HyaluronicAcid ;
+             :treatsConcern :LargePores ,
+                            :Oiliness ,
+                            :Redness ;
              rdfs:label "Niacinamide" .
 
 
@@ -854,7 +908,12 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Occlusive
 :Occlusive rdf:type owl:NamedIndividual ,
-                    :WhatItDoes .
+                    :Function .
+
+
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/OilControl
+:OilControl rdf:type owl:NamedIndividual ,
+                     :Benefit .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Oiliness
@@ -906,7 +965,7 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Preservative
 :Preservative rdf:type owl:NamedIndividual ,
-                       :WhatItDoes .
+                       :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Redness
@@ -938,9 +997,13 @@
           :providesIngredientBenefit :GoodForTexture ,
                                      :HelpsWithAntiAging ;
           :recommendedFor :Combination ,
+                          :Dry ,
                           :Normal ,
                           :Oily ;
-          :treatsConcern :Wrinkles ;
+          :treatsConcern :Acne ,
+                         :FineLines ,
+                         :Texture ,
+                         :Wrinkles ;
           rdfs:label "Retinoid" .
 
 
@@ -962,28 +1025,28 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/SkinBrightening
 :SkinBrightening rdf:type owl:NamedIndividual ,
-                          :WhatItDoes .
+                          :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/SkinConditioning
 :SkinConditioning rdf:type owl:NamedIndividual ,
                            :Benefit ,
-                           :WhatItDoes .
+                           :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/SkinProtecting
 :SkinProtecting rdf:type owl:NamedIndividual ,
-                         :WhatItDoes .
+                         :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Soothing
 :Soothing rdf:type owl:NamedIndividual ,
-                   :WhatItDoes .
+                   :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Stabilizing
 :Stabilizing rdf:type owl:NamedIndividual ,
-                      :WhatItDoes .
+                      :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Sulfate
@@ -999,7 +1062,7 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Surfactant
 :Surfactant rdf:type owl:NamedIndividual ,
-                     :WhatItDoes .
+                     :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Texture
@@ -1009,12 +1072,12 @@
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/UVFilter
 :UVFilter rdf:type owl:NamedIndividual ,
-                   :WhatItDoes .
+                   :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/Viscosity
 :Viscosity rdf:type owl:NamedIndividual ,
-                    :WhatItDoes .
+                    :Function .
 
 
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology/VitaminC
