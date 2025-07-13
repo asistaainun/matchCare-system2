@@ -86,6 +86,67 @@ const Product = sequelize.define('Product', {
   },
   providedBenefits: {
     type: DataTypes.ARRAY(DataTypes.STRING)
+  },
+    semanticScore: {
+    type: DataTypes.DECIMAL(5, 2),
+    defaultValue: null,
+    comment: 'Overall semantic compatibility score'
+  },
+  ontologyTags: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: [],
+    comment: 'Tags derived from ontology analysis'
+  },
+  ingredientInteractions: {
+    type: DataTypes.JSONB,
+    defaultValue: {},
+    comment: 'Known ingredient interactions within product'
+  },
+  
+  // Enhanced Categorization
+  targetSkinTypes: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: [],
+    comment: 'Ontology-derived target skin types'
+  },
+  primaryBenefits: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: [],
+    comment: 'Primary benefits from semantic analysis'
+  },
+  concernsTargeted: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: [],
+    comment: 'Specific concerns this product targets'
+  },
+  
+  // Quality and Trust Metrics
+  ingredientQualityScore: {
+    type: DataTypes.INTEGER,
+    defaultValue: null,
+    validate: { min: 0, max: 100 },
+    comment: 'Quality score based on ingredient analysis'
+  },
+  formulationComplexity: {
+    type: DataTypes.ENUM('simple', 'moderate', 'complex'),
+    defaultValue: 'moderate'
+  },
+  evidenceLevel: {
+    type: DataTypes.ENUM('low', 'moderate', 'high'),
+    defaultValue: 'moderate',
+    comment: 'Scientific evidence level for key ingredients'
+  },
+  
+  // User Interaction Enhancements
+  semanticMatches: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    comment: 'Number of times product matched semantically'
+  },
+  lastSemanticUpdate: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: 'Last time semantic data was updated'
   }
 }, {
   tableName: 'products',

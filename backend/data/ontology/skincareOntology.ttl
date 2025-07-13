@@ -311,6 +311,18 @@
                                       ] .
 
 
+###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#DrySkinRecommendation
+:DrySkinRecommendation rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty :recommendedFor ;
+                                         owl:hasValue :Dry
+                                       ] ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :userHasSkinType ;
+                                         owl:hasValue :Dry
+                                       ] .
+
+
 ###  http://www.semanticweb.org/msilaptop/ontologies/2025/4/skincareOntology#OilyAcneRule
 :OilyAcneRule rdf:type owl:Class ;
               rdfs:subClassOf [ rdf:type owl:Restriction ;
