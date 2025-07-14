@@ -1,46 +1,40 @@
-const { DataTypes } = require('sequelize');
-const bcrypt = require('bcryptjs');
-const sequelize = require('../config/database');
-
-const User = sequelize.define('User', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true
+module.exports = (sequelize, DataTypes) => {
+  const UserProfile = sequelize.define('UserProfile', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'Users', key: 'id' }
+    },
+    skinType: {
+      type: DataTypes.ENUM('normal', 'dry', 'oily', 'combination', 'sensitive'),
+      allowNull: false
+    },
+    skinConcerns: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
+    },
+    knownSensitivities: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
+    },
+    preferredBrands: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
+    },
+    avoidedIngredients: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
+    },
+    likedIngredients: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
     }
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  firstName: {
-    type: DataTypes.STRING
-  },
-  lastName: {
-    type: DataTypes.STRING
-  },
-  isActive: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
-  }
-}, {
-  tableName: 'users',
-  hooks: {
-    beforeCreate: async (user) => {
-      user.password = await bcrypt.hash(user.password, 12);
-    }
-  }
-});
+  });
 
-User.prototype.comparePassword = async function(password) {
-  return bcrypt.compare(password, this.password);
+  return UserProfile;
 };
-
-module.exports = User;

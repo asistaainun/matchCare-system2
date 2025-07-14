@@ -21,7 +21,11 @@
     "test:complete": "node scripts/testComplete.js",
     "stats": "node scripts/generateStats.js",
     "db:setup": "npm run migrate && npm run import:all",
-    "db:reset": "npm run migrate && npm run import:all && npm run test:complete"
+    "db:reset": "npm run migrate && npm run import:all && npm run test:complete",
+    "import": "node scripts/import-csv-data.js",
+    "db:migrate": "npx sequelize-cli db:migrate",
+    "db:seed": "npx sequelize-cli db:seed:all",
+    "ontology:generate": "node scripts/generate-working-ontology.js"
   },
   "keywords": [
     "skincare",

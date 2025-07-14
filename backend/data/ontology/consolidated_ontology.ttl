@@ -1,0 +1,80 @@
+@prefix : <http://www.matchcare.com/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ONTOLOGY METADATA
+<http://www.matchcare.com/ontology> rdf:type owl:Ontology ;
+    rdfs:label "MatchCare Skincare Ontology" ;
+    owl:versionInfo "2.0" .
+
+# MAIN CLASSES
+:SkinType rdf:type owl:Class .
+:SkinConcern rdf:type owl:Class .
+:Ingredient rdf:type owl:Class .
+:Product rdf:type owl:Class .
+:Function rdf:type owl:Class .
+:Benefit rdf:type owl:Class .
+
+# SKIN TYPES
+:Normal rdf:type :SkinType ; rdfs:label "Normal" .
+:Dry rdf:type :SkinType ; rdfs:label "Dry" .
+:Oily rdf:type :SkinType ; rdfs:label "Oily" .
+:Combination rdf:type :SkinType ; rdfs:label "Combination" .
+
+# SKIN CONCERNS
+:Acne rdf:type :SkinConcern ; rdfs:label "Acne" .
+:Wrinkles rdf:type :SkinConcern ; rdfs:label "Wrinkles" .
+:Dryness rdf:type :SkinConcern ; rdfs:label "Dryness" .
+:Oiliness rdf:type :SkinConcern ; rdfs:label "Oiliness" .
+:Sensitivity rdf:type :SkinConcern ; rdfs:label "Sensitivity" .
+:DarkSpots rdf:type :SkinConcern ; rdfs:label "Dark Spots" .
+:FineLines rdf:type :SkinConcern ; rdfs:label "Fine Lines" .
+:Redness rdf:type :SkinConcern ; rdfs:label "Redness" .
+:Pores rdf:type :SkinConcern ; rdfs:label "Large Pores" .
+:Dullness rdf:type :SkinConcern ; rdfs:label "Dullness" .
+
+# KEY INGREDIENTS
+:HyaluronicAcid rdf:type :Ingredient ;
+    rdfs:label "Hyaluronic Acid" ;
+    :suitableFor :Dry, :Normal, :Sensitive ;
+    :treatsConcern :Dryness, :FineLines ;
+    :hasFunction :Humectant .
+
+:Niacinamide rdf:type :Ingredient ;
+    rdfs:label "Niacinamide" ;
+    :suitableFor :Oily, :Combination, :Acne ;
+    :treatsConcern :Acne, :Pores, :Oiliness ;
+    :hasFunction :Sebum_Regulator .
+
+:Retinol rdf:type :Ingredient ;
+    rdfs:label "Retinol" ;
+    :suitableFor :Normal, :Oily ;
+    :treatsConcern :Wrinkles, :FineLines, :Acne ;
+    :hasFunction :Cell_Turnover_Accelerator .
+
+:VitaminC rdf:type :Ingredient ;
+    rdfs:label "Vitamin C" ;
+    :suitableFor :Normal, :Dry, :Combination ;
+    :treatsConcern :DarkSpots, :Dullness ;
+    :hasFunction :Antioxidant .
+
+:SalicylicAcid rdf:type :Ingredient ;
+    rdfs:label "Salicylic Acid" ;
+    :suitableFor :Oily, :Acne ;
+    :treatsConcern :Acne, :Pores ;
+    :hasFunction :Exfoliant .
+
+# PROPERTIES
+:suitableFor rdf:type owl:ObjectProperty .
+:treatsConcern rdf:type owl:ObjectProperty .
+:hasFunction rdf:type owl:ObjectProperty .
+:synergisticWith rdf:type owl:ObjectProperty, owl:SymmetricProperty .
+:incompatibleWith rdf:type owl:ObjectProperty, owl:SymmetricProperty .
+
+# INGREDIENT INTERACTIONS
+:HyaluronicAcid :synergisticWith :Niacinamide .
+:VitaminC :synergisticWith :HyaluronicAcid .
+:Retinol :incompatibleWith :VitaminC .
+:SalicylicAcid :incompatibleWith :Retinol .

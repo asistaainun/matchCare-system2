@@ -1,12 +1,12 @@
 const { Sequelize } = require('sequelize');
-const config = require('../config/database');
-
-const sequelize = new Sequelize(config);
+const { sequelize } = require('../config/database'); // FIX: Import sequelize instance, bukan config
 
 // Import Models
-const Product = require('./Product')(sequelize);
-const Ingredient = require('./Ingredient')(sequelize);
-const ProductIngredient = require('./ProductIngredient')(sequelize);
+const Product = require('./Product')(sequelize, Sequelize);
+const Ingredient = require('./Ingredient')(sequelize, Sequelize);
+const ProductIngredient = require('./ProductIngredient')(sequelize, Sequelize);
+const User = require('./User')(sequelize, Sequelize);
+const UserProfile = require('./UserProfile')(sequelize, Sequelize);
 
 // Define Associations
 Product.belongsToMany(Ingredient, {
@@ -23,29 +23,16 @@ Ingredient.belongsToMany(Product, {
   as: 'products'
 });
 
-Product.hasMany(ProductIngredient, {
-  foreignKey: 'productId',
-  as: 'productIngredients'
-});
-
-Ingredient.hasMany(ProductIngredient, {
-  foreignKey: 'ingredientId',
-  as: 'ingredientProducts'
-});
-
-ProductIngredient.belongsTo(Product, {
-  foreignKey: 'productId',
-  as: 'product'
-});
-
-ProductIngredient.belongsTo(Ingredient, {
-  foreignKey: 'ingredientId',
-  as: 'ingredient'
-});
+// User Profile Associations
+User.hasOne(UserProfile, { foreignKey: 'userId', as: 'profile' });
+UserProfile.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 module.exports = {
   sequelize,
+  Sequelize,
   Product,
   Ingredient,
-  ProductIngredient
+  ProductIngredient,
+  User,
+  UserProfile
 };
