@@ -38,7 +38,7 @@
 # KEY INGREDIENTS
 :HyaluronicAcid rdf:type :Ingredient ;
     rdfs:label "Hyaluronic Acid" ;
-    :suitableFor :Dry, :Normal, :Sensitive ;
+    :suitableFor :Dry, :Normal, :Oily, :Combination ;
     :treatsConcern :Dryness, :FineLines ;
     :hasFunction :Humectant .
 
