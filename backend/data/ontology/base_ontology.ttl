@@ -1,0 +1,220 @@
+@prefix : <http://www.matchcare.com/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ===== ONTOLOGY METADATA =====
+<http://www.matchcare.com/ontology> rdf:type owl:Ontology ;
+    rdfs:label "MatchCare Skincare Ontology" ;
+    rdfs:comment "Ontology for skincare product recommendations based on skin type and concerns" ;
+    owl:versionInfo "1.0" .
+
+# ===== MAIN CLASSES =====
+
+:SkinType rdf:type owl:Class ;
+    rdfs:label "Skin Type" ;
+    rdfs:comment "Types of skin (Normal, Dry, Oily, Combination, Sensitive)" .
+
+:SkinConcern rdf:type owl:Class ;
+    rdfs:label "Skin Concern" ;
+    rdfs:comment "Specific skin issues or conditions" .
+
+:Ingredient rdf:type owl:Class ;
+    rdfs:label "Ingredient" ;
+    rdfs:comment "Active ingredients used in skincare products" .
+
+:Product rdf:type owl:Class ;
+    rdfs:label "Product" ;
+    rdfs:comment "Skincare products containing ingredients" .
+
+:Function rdf:type owl:Class ;
+    rdfs:label "Function" ;
+    rdfs:comment "What an ingredient does (humectant, emollient, etc.)" .
+
+:Benefit rdf:type owl:Class ;
+    rdfs:label "Benefit" ;
+    rdfs:comment "Benefits provided by ingredients or products" .
+
+# ===== OBJECT PROPERTIES =====
+
+:suitableFor rdf:type owl:ObjectProperty ;
+    rdfs:domain :Ingredient ;
+    rdfs:range :SkinType ;
+    rdfs:label "suitable for" ;
+    rdfs:comment "Indicates an ingredient is suitable for a specific skin type" .
+
+:treatsConcern rdf:type owl:ObjectProperty ;
+    rdfs:domain :Ingredient ;
+    rdfs:range :SkinConcern ;
+    rdfs:label "treats concern" ;
+    rdfs:comment "Indicates an ingredient addresses a specific skin concern" .
+
+:hasFunction rdf:type owl:ObjectProperty ;
+    rdfs:domain :Ingredient ;
+    rdfs:range :Function ;
+    rdfs:label "has function" ;
+    rdfs:comment "Describes what an ingredient does" .
+
+:providesBenefit rdf:type owl:ObjectProperty ;
+    rdfs:domain :Ingredient ;
+    rdfs:range :Benefit ;
+    rdfs:label "provides benefit" ;
+    rdfs:comment "Benefit provided by an ingredient" .
+
+:containsIngredient rdf:type owl:ObjectProperty ;
+    rdfs:domain :Product ;
+    rdfs:range :Ingredient ;
+    rdfs:label "contains ingredient" ;
+    rdfs:comment "Product contains this ingredient" .
+
+:synergisticWith rdf:type owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:domain :Ingredient ;
+    rdfs:range :Ingredient ;
+    rdfs:label "synergistic with" ;
+    rdfs:comment "Ingredients that work well together" .
+
+:incompatibleWith rdf:type owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:domain :Ingredient ;
+    rdfs:range :Ingredient ;
+    rdfs:label "incompatible with" ;
+    rdfs:comment "Ingredients that should not be used together" .
+
+# ===== DATA PROPERTIES =====
+
+:hasName rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "has name" ;
+    rdfs:comment "Name of an entity" .
+
+:hasScore rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:integer ;
+    rdfs:label "has score" ;
+    rdfs:comment "Numerical score for ranking" .
+
+:hasConfidence rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:float ;
+    rdfs:label "has confidence" ;
+    rdfs:comment "Confidence level (0.0 to 1.0)" .
+
+:hasDescription rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "has description" ;
+    rdfs:comment "Textual description" .
+
+# ===== PREDEFINED INSTANCES =====
+
+# Skin Types
+:Normal rdf:type :SkinType ;
+    rdfs:label "Normal" ;
+    :hasName "Normal" ;
+    :hasDescription "Balanced skin with minimal concerns" .
+
+:Dry rdf:type :SkinType ;
+    rdfs:label "Dry" ;
+    :hasName "Dry" ;
+    :hasDescription "Skin lacking moisture and natural oils" .
+
+:Oily rdf:type :SkinType ;
+    rdfs:label "Oily" ;
+    :hasName "Oily" ;
+    :hasDescription "Skin with excess oil production" .
+
+:Combination rdf:type :SkinType ;
+    rdfs:label "Combination" ;
+    :hasName "Combination" ;
+    :hasDescription "Mixed skin with both oily and dry areas" .
+
+
+# Skin Concerns
+:Acne rdf:type :SkinConcern ;
+    rdfs:label "Acne" ;
+    :hasName "Acne" .
+
+:Wrinkles rdf:type :SkinConcern ;
+    rdfs:label "Wrinkles" ;
+    :hasName "Wrinkles" .
+
+:FineLines rdf:type :SkinConcern ;
+    rdfs:label "Fine Lines" ;
+    :hasName "Fine Lines" .
+
+:Dryness rdf:type :SkinConcern ;
+    rdfs:label "Dryness" ;
+    :hasName "Dryness" .
+
+:Oiliness rdf:type :SkinConcern ;
+    rdfs:label "Oiliness" ;
+    :hasName "Oiliness" .
+
+:Sensitivity rdf:type :SkinConcern ;
+    rdfs:label "Sensitivity" ;
+    :hasName "Sensitivity" .
+
+:DarkSpots rdf:type :SkinConcern ;
+    rdfs:label "Dark Spots" ;
+    :hasName "Dark Spots" .
+
+:Pores rdf:type :SkinConcern ;
+    rdfs:label "Pores" ;
+    :hasName "Pores" .
+
+:Dullness rdf:type :SkinConcern ;
+    rdfs:label "Dullness" ;
+    :hasName "Dullness" .
+
+:Texture rdf:type :SkinConcern ;
+    rdfs:label "Texture" ;
+    :hasName "Texture" .
+
+# Functions
+:Humectant rdf:type :Function ;
+    rdfs:label "Humectant" ;
+    :hasName "Humectant" ;
+    :hasDescription "Attracts and retains moisture" .
+
+:Emollient rdf:type :Function ;
+    rdfs:label "Emollient" ;
+    :hasName "Emollient" ;
+    :hasDescription "Softens and smooths skin" .
+
+:Exfoliant rdf:type :Function ;
+    rdfs:label "Exfoliant" ;
+    :hasName "Exfoliant" ;
+    :hasDescription "Removes dead skin cells" .
+
+:Antioxidant rdf:type :Function ;
+    rdfs:label "Antioxidant" ;
+    :hasName "Antioxidant" ;
+    :hasDescription "Protects against free radical damage" .
+
+:AntiInflammatory rdf:type :Function ;
+    rdfs:label "Anti-Inflammatory" ;
+    :hasName "Anti-Inflammatory" ;
+    :hasDescription "Reduces inflammation and irritation" .
+
+# Benefits
+:Hydrating rdf:type :Benefit ;
+    rdfs:label "Hydrating" ;
+    :hasName "Hydrating" .
+
+:AntiAging rdf:type :Benefit ;
+    rdfs:label "Anti-Aging" ;
+    :hasName "Anti-Aging" .
+
+:Brightening rdf:type :Benefit ;
+    rdfs:label "Brightening" ;
+    :hasName "Brightening" .
+
+:AcneFighter rdf:type :Benefit ;
+    rdfs:label "Acne Fighter" ;
+    :hasName "Acne Fighter" .
+
+:PoreMinimizing rdf:type :Benefit ;
+    rdfs:label "Pore Minimizing" ;
+    :hasName "Pore Minimizing" .
+
+:SkinConditioning rdf:type :Benefit ;
+    rdfs:label "Skin Conditioning" ;
+    :hasName "Skin Conditioning" .
+

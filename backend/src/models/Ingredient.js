@@ -1,177 +1,201 @@
-const Ingredient = sequelize.define('Ingredient', {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
-  },
-  
-  // Basic Information
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  commonName: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    comment: 'Common/marketing name'
-  },
-  incideName: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    comment: 'INCI (International Nomenclature) name'
-  },
-  alternativeNames: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: [],
-    comment: 'Alternative names and synonyms'
-  },
-  
-  // Ontology Data
-  ontologyUri: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    comment: 'URI in the skincare ontology'
-  },
-  semanticCategory: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    comment: 'Semantic category from ontology'
-  },
-  functionalCategories: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: [],
-    comment: 'Functional categories (humectant, exfoliant, etc.)'
-  },
-  
-  // Scientific Properties
-  molecularWeight: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: true
-  },
-  solubility: {
-    type: DataTypes.ENUM('water', 'oil', 'both', 'neither'),
-    allowNull: true
-  },
-  phRange: {
-    type: DataTypes.JSONB,
-    allowNull: true,
-    comment: 'Optimal pH range {min, max}'
-  },
-  stability: {
-    type: DataTypes.ENUM('low', 'moderate', 'high'),
-    defaultValue: 'moderate'
-  },
-  
-  // Efficacy and Safety
-  efficacyScore: {
-    type: DataTypes.INTEGER,
-    validate: { min: 0, max: 100 },
-    comment: 'Scientific efficacy rating'
-  },
-  safetyRating: {
-    type: DataTypes.INTEGER,
-    validate: { min: 1, max: 10 },
-    comment: 'Safety rating (1=low, 10=very safe)'
-  },
-  comedogenicRating: {
-    type: DataTypes.INTEGER,
-    validate: { min: 0, max: 5 },
-    allowNull: true,
-    comment: 'Comedogenic rating (0=non-comedogenic, 5=highly comedogenic)'
-  },
-  irritationPotential: {
-    type: DataTypes.ENUM('low', 'moderate', 'high'),
-    defaultValue: 'low'
-  },
-  
-  // Usage Information
-  recommendedConcentration: {
-    type: DataTypes.JSONB,
-    comment: 'Recommended concentration range {min, max, unit}'
-  },
-  usageFrequency: {
-    type: DataTypes.ENUM('daily', 'alternate', 'weekly', 'as_needed'),
-    allowNull: true
-  },
-  timeOfUse: {
-    type: DataTypes.ARRAY(DataTypes.ENUM('morning', 'evening', 'anytime')),
-    defaultValue: ['anytime']
-  },
-  
-  // Interaction Data
-  synergisticIngredients: {
-    type: DataTypes.ARRAY(DataTypes.UUID),
-    defaultValue: [],
-    comment: 'Ingredients that work well together'
-  },
-  incompatibleIngredients: {
-    type: DataTypes.ARRAY(DataTypes.UUID),
-    defaultValue: [],
-    comment: 'Ingredients to avoid combining'
-  },
-  
-  // Skin Compatibility
-  suitableForSkinTypes: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: [],
-    comment: 'Skin types this ingredient suits'
-  },
-  skinConcernsBenefits: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: [],
-    comment: 'Skin concerns this ingredient addresses'
-  },
-  contraindications: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: [],
-    comment: 'Conditions where this ingredient should be avoided'
-  },
-  
-  // Evidence and Sources
-  evidenceLevel: {
-    type: DataTypes.ENUM('limited', 'moderate', 'strong'),
-    defaultValue: 'moderate'
-  },
-  studiesCount: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-    comment: 'Number of scientific studies'
-  },
-  lastUpdated: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
-  },
-  
-  // Product Relations
-  productCount: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-    comment: 'Number of products containing this ingredient'
-  },
-  popularityScore: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-    comment: 'Popularity score based on usage'
-  }
-}, {
-  tableName: 'ingredients',
-  indexes: [
-    { fields: ['name'], unique: true },
-    { fields: ['commonName'] },
-    { fields: ['incideName'] },
-    { 
-      fields: ['functionalCategories'], 
-      using: 'gin',
-      name: 'ingredients_functional_categories_gin'
+const { DataTypes } = require('sequelize');
+
+module.exports = (sequelize) => {
+  const Ingredient = sequelize.define('Ingredient', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
-    { 
-      fields: ['suitableForSkinTypes'], 
-      using: 'gin',
-      name: 'ingredients_skin_types_gin'
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: true,
+        len: [1, 255]
+      }
     },
-    { fields: ['efficacyScore'] },
-    { fields: ['safetyRating'] },
-    { fields: ['ontologyUri'] }
-  ]
-});
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    
+    // Array fields with JSON handling
+    alternativeNames: {
+      type: DataTypes.TEXT,
+      get() {
+        const value = this.getDataValue('alternativeNames');
+        return value ? value.split(',').map(name => name.trim()) : [];
+      },
+      set(value) {
+        this.setDataValue('alternativeNames', Array.isArray(value) ? value.join(', ') : value);
+      }
+    },
+    actualFunctions: {
+      type: DataTypes.TEXT,
+      get() {
+        const value = this.getDataValue('actualFunctions');
+        try {
+          return value ? JSON.parse(value) : [];
+        } catch {
+          return value ? value.split(',').map(f => f.trim()) : [];
+        }
+      },
+      set(value) {
+        this.setDataValue('actualFunctions', JSON.stringify(value || []));
+      }
+    },
+    functionalCategories: {
+      type: DataTypes.TEXT,
+      get() {
+        const value = this.getDataValue('functionalCategories');
+        try {
+          return value ? JSON.parse(value) : [];
+        } catch {
+          return value ? value.split(',').map(f => f.trim()) : [];
+        }
+      },
+      set(value) {
+        this.setDataValue('functionalCategories', JSON.stringify(value || []));
+      }
+    },
+    keyIngredientTypes: {
+      type: DataTypes.TEXT,
+      get() {
+        const value = this.getDataValue('keyIngredientTypes');
+        try {
+          return value ? JSON.parse(value) : [];
+        } catch {
+          return value ? value.split(',').map(f => f.trim()) : [];
+        }
+      },
+      set(value) {
+        this.setDataValue('keyIngredientTypes', JSON.stringify(value || []));
+      }
+    },
+    suitableForSkinTypes: {
+      type: DataTypes.TEXT,
+      get() {
+        const value = this.getDataValue('suitableForSkinTypes');
+        try {
+          return value ? JSON.parse(value) : [];
+        } catch {
+          return value ? value.split(',').map(f => f.trim()) : [];
+        }
+      },
+      set(value) {
+        this.setDataValue('suitableForSkinTypes', JSON.stringify(value || []));
+      }
+    },
+    addressesConcerns: {
+      type: DataTypes.TEXT,
+      get() {
+        const value = this.getDataValue('addressesConcerns');
+        try {
+          return value ? JSON.parse(value) : [];
+        } catch {
+          return value ? value.split(',').map(f => f.trim()) : [];
+        }
+      },
+      set(value) {
+        this.setDataValue('addressesConcerns', JSON.stringify(value || []));
+      }
+    },
+    providedBenefits: {
+      type: DataTypes.TEXT,
+      get() {
+        const value = this.getDataValue('providedBenefits');
+        try {
+          return value ? JSON.parse(value) : [];
+        } catch {
+          return value ? value.split(',').map(f => f.trim()) : [];
+        }
+      },
+      set(value) {
+        this.setDataValue('providedBenefits', JSON.stringify(value || []));
+      }
+    },
+    sensitivities: {
+      type: DataTypes.TEXT,
+      get() {
+        const value = this.getDataValue('sensitivities');
+        try {
+          return value ? JSON.parse(value) : [];
+        } catch {
+          return value ? value.split(',').map(f => f.trim()) : [];
+        }
+      },
+      set(value) {
+        this.setDataValue('sensitivities', JSON.stringify(value || []));
+      }
+    },
+    
+    // Basic fields
+    description: DataTypes.TEXT,
+    whatItDoes: DataTypes.STRING,
+    
+    // Flags
+    isKeyIngredient: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    isMultifunctional: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    hasComprehensiveData: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    
+    // Safety
+    pregnancySafe: DataTypes.STRING,
+    alcoholFree: DataTypes.BOOLEAN,
+    fragranceFree: DataTypes.BOOLEAN,
+    siliconeFree: DataTypes.BOOLEAN,
+    sulfateFree: DataTypes.BOOLEAN,
+    parabenFree: DataTypes.BOOLEAN,
+    
+    // Detailed info
+    explanation: DataTypes.TEXT,
+    benefit: DataTypes.TEXT,
+    safety: DataTypes.TEXT,
+    url: DataTypes.STRING,
+    
+    // Guidelines
+    concentrationGuidelines: DataTypes.DECIMAL(5, 2),
+    interactionWarnings: DataTypes.TEXT,
+    skinTypeNotes: DataTypes.TEXT,
+    
+    // Scoring
+    popularityScore: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      validate: { min: 0, max: 100 }
+    },
+    efficacyRating: {
+      type: DataTypes.DECIMAL(3, 1),
+      validate: { min: 1.0, max: 10.0 }
+    },
+    safetyRating: {
+      type: DataTypes.DECIMAL(3, 1),
+      validate: { min: 1.0, max: 10.0 }
+    }
+  }, {
+    tableName: 'ingredients',
+    hooks: {
+      beforeValidate: (ingredient) => {
+        if (ingredient.name && !ingredient.slug) {
+          ingredient.slug = ingredient.name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '');
+        }
+      }
+    }
+  });
+
+  return Ingredient;
+};

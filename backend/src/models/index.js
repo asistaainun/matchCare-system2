@@ -1,51 +1,51 @@
-// UserProfile associations
-UserProfile.belongsTo(sequelize.models.User, { foreignKey: 'userId', as: 'user' });
-sequelize.models.User.hasOne(UserProfile, { foreignKey: 'userId', as: 'profile' });
+const { Sequelize } = require('sequelize');
+const config = require('../config/database');
 
-// GuestSession associations
-GuestSession.belongsTo(sequelize.models.User, { 
-  foreignKey: 'convertedToUserId', 
-  as: 'convertedUser',
-  allowNull: true 
+const sequelize = new Sequelize(config);
+
+// Import Models
+const Product = require('./Product')(sequelize);
+const Ingredient = require('./Ingredient')(sequelize);
+const ProductIngredient = require('./ProductIngredient')(sequelize);
+
+// Define Associations
+Product.belongsToMany(Ingredient, {
+  through: ProductIngredient,
+  foreignKey: 'productId',
+  otherKey: 'ingredientId',
+  as: 'ingredients'
 });
 
-// Ingredient associations (many-to-many with products)
-if (sequelize.models.Product) {
-  sequelize.models.Product.belongsToMany(Ingredient, {
-    through: 'ProductIngredients',
-    foreignKey: 'productId',
-    otherKey: 'ingredientId',
-    as: 'ingredients'
-  });
-  
-  Ingredient.belongsToMany(sequelize.models.Product, {
-    through: 'ProductIngredients',
-    foreignKey: 'ingredientId',
-    otherKey: 'productId',
-    as: 'products'
-  });
-}
-
-// Self-referencing associations for ingredient interactions
-Ingredient.belongsToMany(Ingredient, {
-  through: 'IngredientInteractions',
-  as: 'synergisticWith',
-  foreignKey: 'ingredientAId',
-  otherKey: 'ingredientBId',
-  scope: { interactionType: 'synergistic' }
+Ingredient.belongsToMany(Product, {
+  through: ProductIngredient,
+  foreignKey: 'ingredientId',
+  otherKey: 'productId',
+  as: 'products'
 });
 
-Ingredient.belongsToMany(Ingredient, {
-  through: 'IngredientInteractions', 
-  as: 'incompatibleWith',
-  foreignKey: 'ingredientAId',
-  otherKey: 'ingredientBId',
-  scope: { interactionType: 'incompatible' }
+Product.hasMany(ProductIngredient, {
+  foreignKey: 'productId',
+  as: 'productIngredients'
+});
+
+Ingredient.hasMany(ProductIngredient, {
+  foreignKey: 'ingredientId',
+  as: 'ingredientProducts'
+});
+
+ProductIngredient.belongsTo(Product, {
+  foreignKey: 'productId',
+  as: 'product'
+});
+
+ProductIngredient.belongsTo(Ingredient, {
+  foreignKey: 'ingredientId',
+  as: 'ingredient'
 });
 
 module.exports = {
-  UserProfile,
-  GuestSession,
+  sequelize,
+  Product,
   Ingredient,
-  enhancedProductFields
+  ProductIngredient
 };
