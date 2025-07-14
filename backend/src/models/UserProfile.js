@@ -19,10 +19,10 @@ const UserProfile = sequelize.define('UserProfile', {
   
   // Core Profile Data
   skinType: {
-    type: DataTypes.ENUM('normal', 'dry', 'oily', 'combination', 'sensitive'),
+    type: DataTypes.ENUM('normal', 'dry', 'oily', 'combination'),
     allowNull: false,
     validate: {
-      isIn: [['normal', 'dry', 'oily', 'combination', 'sensitive']]
+      isIn: [['normal', 'dry', 'oily', 'combination']]
     }
   },
   skinConcerns: {
