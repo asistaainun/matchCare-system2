@@ -1,14 +1,23 @@
 const { Sequelize } = require('sequelize');
-const { sequelize } = require('../config/database'); // FIX: Import sequelize instance, bukan config
+require('dotenv').config();
 
-// Import Models
+// Direct sequelize creation
+const sequelize = new Sequelize({
+  dialect: 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME || 'matchcare_db',
+  username: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD || 'password',
+  logging: false
+});
+
+// Import ONLY existing models
 const Product = require('./Product')(sequelize, Sequelize);
 const Ingredient = require('./Ingredient')(sequelize, Sequelize);
 const ProductIngredient = require('./ProductIngredient')(sequelize, Sequelize);
-const User = require('./User')(sequelize, Sequelize);
-const UserProfile = require('./UserProfile')(sequelize, Sequelize);
 
-// Define Associations
+// Simple Associations
 Product.belongsToMany(Ingredient, {
   through: ProductIngredient,
   foreignKey: 'productId',
@@ -19,20 +28,14 @@ Product.belongsToMany(Ingredient, {
 Ingredient.belongsToMany(Product, {
   through: ProductIngredient,
   foreignKey: 'ingredientId',
-  otherKey: 'productId',
+  otherKey: 'productId', 
   as: 'products'
 });
-
-// User Profile Associations
-User.hasOne(UserProfile, { foreignKey: 'userId', as: 'profile' });
-UserProfile.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 module.exports = {
   sequelize,
   Sequelize,
   Product,
   Ingredient,
-  ProductIngredient,
-  User,
-  UserProfile
+  ProductIngredient
 };
